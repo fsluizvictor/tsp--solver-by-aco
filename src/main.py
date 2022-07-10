@@ -111,9 +111,12 @@ def draw_path(line, CityCoordinates):
     plt.plot(x, y, 'r-', color='#4169E1', alpha=0.8, linewidth=0.8)
     plt.xlabel('x')
     plt.ylabel('y')
+    plt.savefig(
+        "/home/luiz_victor/Projects/tsp--solver-by-aco/outputs/att48_48_capitals_of_the_US_padberg_rinaldi_solution.jpg")
     plt.show()
 
-def draw_graph(CityCoordinates : List[Tuple[int, int]]):
+
+def draw_graph(CityCoordinates: List[Tuple[int, int]]):
     x, y = [], []
     for coord in CityCoordinates:
         x.append(coord[0])
@@ -122,11 +125,12 @@ def draw_graph(CityCoordinates : List[Tuple[int, int]]):
     plt.plot(x, y, 'r-', color='#4169E1', alpha=0.8, linewidth=0.8)
     plt.xlabel('x')
     plt.ylabel('y')
+    plt.legend
     plt.show()
 
 
 def read_input() -> List[str]:
-    path_to_file = "/home/luiz_victor/Projects/tsp--solver-by-aco/inputs/d18500-Bundesrepublik-Deutschland.txt"
+    path_to_file = "/home/luiz_victor/Projects/tsp--solver-by-aco/inputs/att48_48_capitals_of_the_US_padberg_rinaldi.txt"
     with open(path_to_file, "r") as file:
         contents = file.read()  # alternatives: file.readlines() or file.readline()
     return contents.split('\n')
@@ -143,34 +147,22 @@ def format_input() -> List[Tuple[int, int]]:
 
 
 if __name__ == '__main__':
-
-    #test = format_input()
-
     # parameter
-    CityNum = 20  # Number of cities
-    MinCoordinate = 0  # Minimum value of two-dimensional coordinates
-    MaxCoordinate = 101  # Maximum value of two-dimensional coordinates
-    iterMax = 100  # Number of iterations
+    iterMax = 10000  # Number of iterations
     iterI = 1  # Current iterations
     # ACO parameters
-    antNum = 50  # Ant number
-    alpha = 2  # Pheromone importance factor
-    beta = 1  # Heuristic function importance factor
+    antNum = 5  # Ant number
+    alpha = 0.7  # Pheromone importance factor
+    beta = 0.7  # Heuristic function importance factor
     rho = 0.2  # Pheromone volatilization factor
     Q = 100.0  # constant
 
     best_fit = math.pow(10, 10)  # Large initial value and store the optimal solution
     best_line = []  # Storage optimal path
 
-    # Randomly generate city data. The city serial number is 0,1,2,3
-    # CityCoordinates = [(random.randint(MinCoordinate,MaxCoordinate),random.randint(MinCoordinate,MaxCoordinate)) for i in range(CityNum)]
-    #CityCoordinates = [(88, 16), (42, 76), (5, 76), (69, 13), (73, 56), (100, 100), (22, 92), (48, 74), (73, 46),
-    #                   (39, 1), (51, 75), (92, 2), (101, 44), (55, 26), (71, 27), (42, 81), (51, 91), (89, 54),
-    #                   (33, 18), (40, 78)]
-
     CityCoordinates = format_input()
 
-    #draw_graph(CityCoordinates)
+    # draw_graph(CityCoordinates)
 
     # Calculate the distance between cities and generate a matrix
     dis_matrix = pd.DataFrame(data=None, columns=range(len(CityCoordinates)), index=range(len(CityCoordinates)))
