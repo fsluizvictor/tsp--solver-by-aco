@@ -3,8 +3,10 @@ Tabu search algorithm TSP problem
  Random in (0),100)20 points generated from 2D plane
  Distance minimization
 """
+import csv
 import math
 import random
+from datetime import datetime
 from typing import List, Tuple
 
 import pandas as pd
@@ -132,7 +134,7 @@ def draw_graph(CityCoordinates: List[Tuple[int, int]]):
 def read_input() -> List[str]:
     path_to_file = "/home/luiz_victor/Projects/tsp--solver-by-aco/inputs/att48_48_capitals_of_the_US_padberg_rinaldi.txt"
     with open(path_to_file, "r") as file:
-        contents = file.read()  # alternatives: file.readlines() or file.readline()
+        contents = file.read()
     return contents.split('\n')
 
 
@@ -146,9 +148,19 @@ def format_input() -> List[Tuple[int, int]]:
     return inputs
 
 
+def write_file_csv(file_name: str, content: List[str]):
+    with open(file_name, 'w', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+        for row in content:
+            spamwriter.writerow(row)
+
+
 if __name__ == '__main__':
+
+    start = datetime.now()
+    content = list()
     # parameter
-    iterMax = 10000  # Number of iterations
+    iterMax = 1000  # Number of iterations
     iterI = 1  # Current iterations
     # ACO parameters
     antNum = 5  # Ant number
@@ -202,6 +214,16 @@ if __name__ == '__main__':
         print(iterI, best_fit)  # Print current algebra and best fit values
         iterI += 1  # Iteration count plus one
         pheromone = pheromone * (1 - rho)  # Pheromone volatilization update
+        content.append(str(best_fit))
 
+    end = datetime.now()
     print(best_line)  # Path order
+    content.append("Path order")
+    for i in best_line:
+        content.append(str(i))
+
+    content.append("Took {}s to increase the values".format((end - start).total_seconds()))
+
+    write_file_csv("/home/luiz_victor/Projects/tsp--solver-by-aco/outputs/att48_48_capitals_of_the_US_padberg_rinaldi.csv",
+                   content)
     draw_path(best_line, CityCoordinates)  # Draw a path map
